@@ -666,6 +666,16 @@ set_target_properties(clangDaemon PROPERTIES
 list(APPEND _IMPORT_CHECK_TARGETS clangDaemon )
 list(APPEND _IMPORT_CHECK_FILES_FOR_clangDaemon "${_IMPORT_PREFIX}/lib64/libclangDaemon.a" )
 
+# Import target "clangDaemonTweaks" for configuration "Release"
+set_property(TARGET clangDaemonTweaks APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
+set_target_properties(clangDaemonTweaks PROPERTIES
+  IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
+  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib64/libclangDaemonTweaks.a"
+  )
+
+list(APPEND _IMPORT_CHECK_TARGETS clangDaemonTweaks )
+list(APPEND _IMPORT_CHECK_FILES_FOR_clangDaemonTweaks "${_IMPORT_PREFIX}/lib64/libclangDaemonTweaks.a" )
+
 # Import target "clangd" for configuration "Release"
 set_property(TARGET clangd APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(clangd PROPERTIES

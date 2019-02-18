@@ -113,7 +113,9 @@
   __interceptor_fclose;
   __interceptor_fdopen;
   __interceptor_fflush;
+  __interceptor_fgetgrent;
   __interceptor_fgetgrent_r;
+  __interceptor_fgetpwent;
   __interceptor_fgetpwent_r;
   __interceptor_fgets;
   __interceptor_fgetxattr;
@@ -145,6 +147,12 @@
   __interceptor_getaddrinfo;
   __interceptor_getcwd;
   __interceptor_getdelim;
+  __interceptor_getgrent;
+  __interceptor_getgrent_r;
+  __interceptor_getgrgid;
+  __interceptor_getgrgid_r;
+  __interceptor_getgrnam;
+  __interceptor_getgrnam_r;
   __interceptor_getgroups;
   __interceptor_gethostbyaddr;
   __interceptor_gethostbyaddr_r;
@@ -163,6 +171,12 @@
   __interceptor_getnameinfo;
   __interceptor_getpass;
   __interceptor_getpeername;
+  __interceptor_getpwent;
+  __interceptor_getpwent_r;
+  __interceptor_getpwnam;
+  __interceptor_getpwnam_r;
+  __interceptor_getpwuid;
+  __interceptor_getpwuid_r;
   __interceptor_getresgid;
   __interceptor_getresuid;
   __interceptor_getsockname;
@@ -281,6 +295,7 @@
   __interceptor_pthread_condattr_getpshared;
   __interceptor_pthread_create;
   __interceptor_pthread_detach;
+  __interceptor_pthread_exit;
   __interceptor_pthread_getname_np;
   __interceptor_pthread_getschedparam;
   __interceptor_pthread_join;
@@ -1327,7 +1342,9 @@
   fclose;
   fdopen;
   fflush;
+  fgetgrent;
   fgetgrent_r;
+  fgetpwent;
   fgetpwent_r;
   fgets;
   fgetxattr;
@@ -1359,6 +1376,12 @@
   getaddrinfo;
   getcwd;
   getdelim;
+  getgrent;
+  getgrent_r;
+  getgrgid;
+  getgrgid_r;
+  getgrnam;
+  getgrnam_r;
   getgroups;
   gethostbyaddr;
   gethostbyaddr_r;
@@ -1377,6 +1400,12 @@
   getnameinfo;
   getpass;
   getpeername;
+  getpwent;
+  getpwent_r;
+  getpwnam;
+  getpwnam_r;
+  getpwuid;
+  getpwuid_r;
   getresgid;
   getresuid;
   getsockname;
@@ -1487,6 +1516,7 @@
   pthread_condattr_getpshared;
   pthread_create;
   pthread_detach;
+  pthread_exit;
   pthread_getname_np;
   pthread_getschedparam;
   pthread_join;

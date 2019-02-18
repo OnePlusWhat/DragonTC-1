@@ -1434,9 +1434,11 @@ bool strict;
 unsigned replacementLength;
 char *replacement;
 
+int priority;
+
 public:
-  static AvailabilityAttr *CreateImplicit(ASTContext &Ctx, IdentifierInfo * Platform, VersionTuple Introduced, VersionTuple Deprecated, VersionTuple Obsoleted, bool Unavailable, llvm::StringRef Message, bool Strict, llvm::StringRef Replacement, SourceRange Loc = SourceRange()) {
-    auto *A = new (Ctx) AvailabilityAttr(Loc, Ctx, Platform, Introduced, Deprecated, Obsoleted, Unavailable, Message, Strict, Replacement, 0);
+  static AvailabilityAttr *CreateImplicit(ASTContext &Ctx, IdentifierInfo * Platform, VersionTuple Introduced, VersionTuple Deprecated, VersionTuple Obsoleted, bool Unavailable, llvm::StringRef Message, bool Strict, llvm::StringRef Replacement, int Priority, SourceRange Loc = SourceRange()) {
+    auto *A = new (Ctx) AvailabilityAttr(Loc, Ctx, Platform, Introduced, Deprecated, Obsoleted, Unavailable, Message, Strict, Replacement, Priority, 0);
     A->setImplicit(true);
     return A;
   }
@@ -1450,6 +1452,7 @@ public:
               , llvm::StringRef Message
               , bool Strict
               , llvm::StringRef Replacement
+              , int Priority
               , unsigned SI
              )
     : InheritableAttr(attr::Availability, R, SI, false, true)
@@ -1461,6 +1464,7 @@ public:
               , messageLength(Message.size()),message(new (Ctx, 1) char[messageLength])
               , strict(Strict)
               , replacementLength(Replacement.size()),replacement(new (Ctx, 1) char[replacementLength])
+              , priority(Priority)
   {
       if (!Message.empty())
         std::memcpy(message, Message.data(), messageLength);
@@ -1529,6 +1533,10 @@ public:
     this->replacement = new (C, 1) char [replacementLength];
     if (!S.empty())
       std::memcpy(this->replacement, S.data(), replacementLength);
+  }
+
+  int getPriority() const {
+    return priority;
   }
 
 static llvm::StringRef getPrettyPlatformName(llvm::StringRef Platform) {
@@ -6521,6 +6529,30 @@ public:
   static bool classof(const Attr *A) { return A->getKind() == attr::ObjCNSObject; }
 };
 
+class ObjCNonLazyClassAttr : public Attr {
+public:
+  static ObjCNonLazyClassAttr *CreateImplicit(ASTContext &Ctx, SourceRange Loc = SourceRange()) {
+    auto *A = new (Ctx) ObjCNonLazyClassAttr(Loc, Ctx, 0);
+    A->setImplicit(true);
+    return A;
+  }
+
+  ObjCNonLazyClassAttr(SourceRange R, ASTContext &Ctx
+              , unsigned SI
+             )
+    : Attr(attr::ObjCNonLazyClass, R, SI, false)
+  {
+  }
+
+  ObjCNonLazyClassAttr *clone(ASTContext &C) const;
+  void printPretty(raw_ostream &OS,
+                   const PrintingPolicy &Policy) const;
+  const char *getSpelling() const;
+
+
+  static bool classof(const Attr *A) { return A->getKind() == attr::ObjCNonLazyClass; }
+};
+
 class ObjCOwnershipAttr : public InheritableAttr {
 IdentifierInfo * kind;
 
@@ -9909,6 +9941,94 @@ public:
 
 
   static bool classof(const Attr *A) { return A->getKind() == attr::WeakRef; }
+};
+
+class WebAssemblyImportModuleAttr : public InheritableAttr {
+unsigned importModuleLength;
+char *importModule;
+
+public:
+  static WebAssemblyImportModuleAttr *CreateImplicit(ASTContext &Ctx, llvm::StringRef ImportModule, SourceRange Loc = SourceRange()) {
+    auto *A = new (Ctx) WebAssemblyImportModuleAttr(Loc, Ctx, ImportModule, 0);
+    A->setImplicit(true);
+    return A;
+  }
+
+  WebAssemblyImportModuleAttr(SourceRange R, ASTContext &Ctx
+              , llvm::StringRef ImportModule
+              , unsigned SI
+             )
+    : InheritableAttr(attr::WebAssemblyImportModule, R, SI, false, false)
+              , importModuleLength(ImportModule.size()),importModule(new (Ctx, 1) char[importModuleLength])
+  {
+      if (!ImportModule.empty())
+        std::memcpy(importModule, ImportModule.data(), importModuleLength);
+  }
+
+  WebAssemblyImportModuleAttr *clone(ASTContext &C) const;
+  void printPretty(raw_ostream &OS,
+                   const PrintingPolicy &Policy) const;
+  const char *getSpelling() const;
+  llvm::StringRef getImportModule() const {
+    return llvm::StringRef(importModule, importModuleLength);
+  }
+  unsigned getImportModuleLength() const {
+    return importModuleLength;
+  }
+  void setImportModule(ASTContext &C, llvm::StringRef S) {
+    importModuleLength = S.size();
+    this->importModule = new (C, 1) char [importModuleLength];
+    if (!S.empty())
+      std::memcpy(this->importModule, S.data(), importModuleLength);
+  }
+
+
+
+  static bool classof(const Attr *A) { return A->getKind() == attr::WebAssemblyImportModule; }
+};
+
+class WebAssemblyImportNameAttr : public InheritableAttr {
+unsigned importNameLength;
+char *importName;
+
+public:
+  static WebAssemblyImportNameAttr *CreateImplicit(ASTContext &Ctx, llvm::StringRef ImportName, SourceRange Loc = SourceRange()) {
+    auto *A = new (Ctx) WebAssemblyImportNameAttr(Loc, Ctx, ImportName, 0);
+    A->setImplicit(true);
+    return A;
+  }
+
+  WebAssemblyImportNameAttr(SourceRange R, ASTContext &Ctx
+              , llvm::StringRef ImportName
+              , unsigned SI
+             )
+    : InheritableAttr(attr::WebAssemblyImportName, R, SI, false, false)
+              , importNameLength(ImportName.size()),importName(new (Ctx, 1) char[importNameLength])
+  {
+      if (!ImportName.empty())
+        std::memcpy(importName, ImportName.data(), importNameLength);
+  }
+
+  WebAssemblyImportNameAttr *clone(ASTContext &C) const;
+  void printPretty(raw_ostream &OS,
+                   const PrintingPolicy &Policy) const;
+  const char *getSpelling() const;
+  llvm::StringRef getImportName() const {
+    return llvm::StringRef(importName, importNameLength);
+  }
+  unsigned getImportNameLength() const {
+    return importNameLength;
+  }
+  void setImportName(ASTContext &C, llvm::StringRef S) {
+    importNameLength = S.size();
+    this->importName = new (C, 1) char [importNameLength];
+    if (!S.empty())
+      std::memcpy(this->importName, S.data(), importNameLength);
+  }
+
+
+
+  static bool classof(const Attr *A) { return A->getKind() == attr::WebAssemblyImportName; }
 };
 
 class WorkGroupSizeHintAttr : public InheritableAttr {

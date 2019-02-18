@@ -218,6 +218,7 @@ DIAG(note_mmap_prev_definition, CLASS_NOTE, (unsigned)diag::Severity::Fatal, "pr
 DIAG(note_mmap_rename_top_level_private_module, CLASS_NOTE, (unsigned)diag::Severity::Fatal, "rename '%0' to ensure it can be found by name", 0, SFINAE_Suppress, false, false, 1)
 DIAG(note_pp_ambiguous_macro_chosen, CLASS_NOTE, (unsigned)diag::Severity::Fatal, "expanding this definition of %0", 0, SFINAE_Suppress, false, false, 1)
 DIAG(note_pp_ambiguous_macro_other, CLASS_NOTE, (unsigned)diag::Severity::Fatal, "other definition of %0", 0, SFINAE_Suppress, false, false, 1)
+DIAG(note_pp_framework_without_header, CLASS_NOTE, (unsigned)diag::Severity::Fatal, "did not find header '%0' in framework '%1' (loaded from '%2')", 0, SFINAE_Suppress, false, false, 1)
 DIAG(note_pp_module_begin_here, CLASS_NOTE, (unsigned)diag::Severity::Fatal, "entering module '%0' due to this pragma", 0, SFINAE_Suppress, false, false, 1)
 DIAG(note_suggest_parens_for_macro, CLASS_NOTE, (unsigned)diag::Severity::Fatal, "parentheses are required around macro argument containing braced initializer list", 0, SFINAE_Suppress, false, false, 1)
 DIAG(note_ucn_four_not_eight, CLASS_NOTE, (unsigned)diag::Severity::Fatal, "did you mean to use '\\u'?", 0, SFINAE_Suppress, false, false, 1)

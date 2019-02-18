@@ -830,6 +830,10 @@ Attr *instantiateTemplateAttribute(const Attr *At, ASTContext &C, Sema &S,
       const auto *A = cast<ObjCNSObjectAttr>(At);
       return A->clone(C);
     }
+    case attr::ObjCNonLazyClass: {
+      const auto *A = cast<ObjCNonLazyClassAttr>(At);
+      return A->clone(C);
+    }
     case attr::ObjCOwnership: {
       const auto *A = cast<ObjCOwnershipAttr>(At);
       return A->clone(C);
@@ -1260,6 +1264,14 @@ Attr *instantiateTemplateAttribute(const Attr *At, ASTContext &C, Sema &S,
     }
     case attr::WeakRef: {
       const auto *A = cast<WeakRefAttr>(At);
+      return A->clone(C);
+    }
+    case attr::WebAssemblyImportModule: {
+      const auto *A = cast<WebAssemblyImportModuleAttr>(At);
+      return A->clone(C);
+    }
+    case attr::WebAssemblyImportName: {
+      const auto *A = cast<WebAssemblyImportNameAttr>(At);
       return A->clone(C);
     }
     case attr::WorkGroupSizeHint: {
@@ -1815,6 +1827,9 @@ Attr *instantiateTemplateAttributeForDecl(const Attr *At,
     case attr::ObjCNSObject: {
       return nullptr;
     }
+    case attr::ObjCNonLazyClass: {
+      return nullptr;
+    }
     case attr::ObjCOwnership: {
       return nullptr;
     }
@@ -2092,6 +2107,12 @@ Attr *instantiateTemplateAttributeForDecl(const Attr *At,
       return nullptr;
     }
     case attr::WeakRef: {
+      return nullptr;
+    }
+    case attr::WebAssemblyImportModule: {
+      return nullptr;
+    }
+    case attr::WebAssemblyImportName: {
       return nullptr;
     }
     case attr::WorkGroupSizeHint: {

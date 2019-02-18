@@ -708,6 +708,10 @@
   bool VisitObjCNSObjectAttr(ObjCNSObjectAttr *A) {
     return true; 
   }
+  bool TraverseObjCNonLazyClassAttr(ObjCNonLazyClassAttr *A);
+  bool VisitObjCNonLazyClassAttr(ObjCNonLazyClassAttr *A) {
+    return true; 
+  }
   bool TraverseObjCOwnershipAttr(ObjCOwnershipAttr *A);
   bool VisitObjCOwnershipAttr(ObjCOwnershipAttr *A) {
     return true; 
@@ -1078,6 +1082,14 @@
   }
   bool TraverseWeakRefAttr(WeakRefAttr *A);
   bool VisitWeakRefAttr(WeakRefAttr *A) {
+    return true; 
+  }
+  bool TraverseWebAssemblyImportModuleAttr(WebAssemblyImportModuleAttr *A);
+  bool VisitWebAssemblyImportModuleAttr(WebAssemblyImportModuleAttr *A) {
+    return true; 
+  }
+  bool TraverseWebAssemblyImportNameAttr(WebAssemblyImportNameAttr *A);
+  bool VisitWebAssemblyImportNameAttr(WebAssemblyImportNameAttr *A) {
     return true; 
   }
   bool TraverseWorkGroupSizeHintAttr(WorkGroupSizeHintAttr *A);
@@ -2815,6 +2827,15 @@ bool VISITORCLASS<Derived>::TraverseObjCNSObjectAttr(ObjCNSObjectAttr *A) {
 }
 
 template <typename Derived>
+bool VISITORCLASS<Derived>::TraverseObjCNonLazyClassAttr(ObjCNonLazyClassAttr *A) {
+  if (!getDerived().VisitAttr(A))
+    return false;
+  if (!getDerived().VisitObjCNonLazyClassAttr(A))
+    return false;
+  return true;
+}
+
+template <typename Derived>
 bool VISITORCLASS<Derived>::TraverseObjCOwnershipAttr(ObjCOwnershipAttr *A) {
   if (!getDerived().VisitAttr(A))
     return false;
@@ -3696,6 +3717,24 @@ bool VISITORCLASS<Derived>::TraverseWeakRefAttr(WeakRefAttr *A) {
 }
 
 template <typename Derived>
+bool VISITORCLASS<Derived>::TraverseWebAssemblyImportModuleAttr(WebAssemblyImportModuleAttr *A) {
+  if (!getDerived().VisitAttr(A))
+    return false;
+  if (!getDerived().VisitWebAssemblyImportModuleAttr(A))
+    return false;
+  return true;
+}
+
+template <typename Derived>
+bool VISITORCLASS<Derived>::TraverseWebAssemblyImportNameAttr(WebAssemblyImportNameAttr *A) {
+  if (!getDerived().VisitAttr(A))
+    return false;
+  if (!getDerived().VisitWebAssemblyImportNameAttr(A))
+    return false;
+  return true;
+}
+
+template <typename Derived>
 bool VISITORCLASS<Derived>::TraverseWorkGroupSizeHintAttr(WorkGroupSizeHintAttr *A) {
   if (!getDerived().VisitAttr(A))
     return false;
@@ -4087,6 +4126,8 @@ bool VISITORCLASS<Derived>::TraverseAttr(Attr *A) {
       return getDerived().TraverseObjCMethodFamilyAttr(cast<ObjCMethodFamilyAttr>(A));
     case attr::ObjCNSObject:
       return getDerived().TraverseObjCNSObjectAttr(cast<ObjCNSObjectAttr>(A));
+    case attr::ObjCNonLazyClass:
+      return getDerived().TraverseObjCNonLazyClassAttr(cast<ObjCNonLazyClassAttr>(A));
     case attr::ObjCOwnership:
       return getDerived().TraverseObjCOwnershipAttr(cast<ObjCOwnershipAttr>(A));
     case attr::ObjCPreciseLifetime:
@@ -4273,6 +4314,10 @@ bool VISITORCLASS<Derived>::TraverseAttr(Attr *A) {
       return getDerived().TraverseWeakImportAttr(cast<WeakImportAttr>(A));
     case attr::WeakRef:
       return getDerived().TraverseWeakRefAttr(cast<WeakRefAttr>(A));
+    case attr::WebAssemblyImportModule:
+      return getDerived().TraverseWebAssemblyImportModuleAttr(cast<WebAssemblyImportModuleAttr>(A));
+    case attr::WebAssemblyImportName:
+      return getDerived().TraverseWebAssemblyImportNameAttr(cast<WebAssemblyImportNameAttr>(A));
     case attr::WorkGroupSizeHint:
       return getDerived().TraverseWorkGroupSizeHintAttr(cast<WorkGroupSizeHintAttr>(A));
     case attr::X86ForceAlignArgPointer:

@@ -212,6 +212,8 @@ DIAG(err_omp_expected_reduction_identifier, CLASS_ERROR, (unsigned)diag::Severit
 DIAG(err_omp_immediate_directive, CLASS_ERROR, (unsigned)diag::Severity::Error, "'#pragma omp %0' %select{|with '%2' clause }1cannot be an immediate substatement", 0, SFINAE_SubstitutionFailure, false, true, 4)
 DIAG(err_omp_map_type_missing, CLASS_ERROR, (unsigned)diag::Severity::Error, "missing map type", 0, SFINAE_SubstitutionFailure, false, true, 4)
 DIAG(err_omp_map_type_modifier_missing, CLASS_ERROR, (unsigned)diag::Severity::Error, "missing map type modifier", 0, SFINAE_SubstitutionFailure, false, true, 4)
+DIAG(err_omp_mapper_expected_declarator, CLASS_ERROR, (unsigned)diag::Severity::Error, "expected declarator on 'omp declare mapper' directive", 0, SFINAE_SubstitutionFailure, false, true, 4)
+DIAG(err_omp_mapper_illegal_identifier, CLASS_ERROR, (unsigned)diag::Severity::Error, "illegal identifier on 'omp declare mapper' directive", 0, SFINAE_SubstitutionFailure, false, true, 4)
 DIAG(err_omp_unexpected_clause, CLASS_ERROR, (unsigned)diag::Severity::Error, "unexpected OpenMP clause '%0' in directive '#pragma omp %1'", 0, SFINAE_SubstitutionFailure, false, true, 4)
 DIAG(err_omp_unexpected_directive, CLASS_ERROR, (unsigned)diag::Severity::Error, "unexpected OpenMP directive %select{|'#pragma omp %1'}0", 0, SFINAE_SubstitutionFailure, false, true, 4)
 DIAG(err_omp_unknown_directive, CLASS_ERROR, (unsigned)diag::Severity::Error, "expected an OpenMP directive", 0, SFINAE_SubstitutionFailure, false, true, 4)

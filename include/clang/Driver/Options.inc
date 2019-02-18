@@ -94,7 +94,7 @@ OPTION(prefix_2, "?", _SLASH_QUESTION, Flag, cl_Group, help, nullptr, CLOption |
 OPTION(prefix_1, "A-", A_DASH, Joined, gfortran_Group, INVALID, nullptr, 0, 0, nullptr, nullptr, nullptr)
 OPTION(prefix_1, "add-plugin", add_plugin, Separate, INVALID, INVALID, nullptr, CC1Option | NoDriverOption, 0,
        "Use the named plugin action in addition to the default action", "<name>", nullptr)
-OPTION(prefix_2, "AI", _SLASH_AI, Joined, cl_Group, INVALID, nullptr, CLOption | DriverOption | CLOption, 0, nullptr, nullptr, nullptr)
+OPTION(prefix_2, "AI", _SLASH_AI, JoinedOrSeparate, cl_Group, INVALID, nullptr, CLOption | DriverOption | CLOption, 0, nullptr, nullptr, nullptr)
 OPTION(prefix_3, "all-warnings", _all_warnings, Flag, INVALID, Wall, nullptr, 0, 0, nullptr, nullptr, nullptr)
 OPTION(prefix_1, "all_load", all__load, Flag, INVALID, INVALID, nullptr, 0, 0, nullptr, nullptr, nullptr)
 OPTION(prefix_1, "allowable_client", allowable__client, Separate, INVALID, INVALID, nullptr, 0, 0, nullptr, nullptr, nullptr)
@@ -342,7 +342,7 @@ OPTION(prefix_3, "cuda-gpu-arch=", cuda_gpu_arch_EQ, Joined, INVALID, INVALID, n
 OPTION(prefix_3, "cuda-host-only", cuda_host_only, Flag, INVALID, INVALID, nullptr, 0, 0,
        "Compile CUDA code for host only.  Has no effect on non-CUDA compilations.", nullptr, nullptr)
 OPTION(prefix_3, "cuda-include-ptx=", cuda_include_ptx_EQ, Joined, INVALID, INVALID, nullptr, DriverOption, 0,
-       "Include PTX for the follwing GPU architecture (e.g. sm_35) or 'all'. May be specified more than once.", nullptr, nullptr)
+       "Include PTX for the following GPU architecture (e.g. sm_35) or 'all'. May be specified more than once.", nullptr, nullptr)
 OPTION(prefix_3, "cuda-noopt-device-debug", cuda_noopt_device_debug, Flag, INVALID, INVALID, nullptr, 0, 0,
        "Enable device-side debug info generation. Disables ptxas optimizations.", nullptr, nullptr)
 OPTION(prefix_3, "cuda-path-ignore-env", cuda_path_ignore_env, Flag, i_Group, INVALID, nullptr, 0, 0,
@@ -556,6 +556,8 @@ OPTION(prefix_1, "fapple-pragma-pack", fapple_pragma_pack, Flag, f_Group, INVALI
        "Enable Apple gcc-compatible #pragma pack handling", nullptr, nullptr)
 OPTION(prefix_1, "fapplication-extension", fapplication_extension, Flag, f_Group, INVALID, nullptr, CC1Option, 0,
        "Restrict code to those available for App Extensions", nullptr, nullptr)
+OPTION(prefix_1, "fapply-global-visibility-to-externs", fapply_global_visibility_to_externs, Flag, INVALID, INVALID, nullptr, CC1Option | NoDriverOption, 0,
+       "Apply global symbol visibility to external declarations without an explicit visibility", nullptr, nullptr)
 OPTION(prefix_1, "fasm-blocks", fasm_blocks, Flag, f_Group, INVALID, nullptr, CC1Option, 0, nullptr, nullptr, nullptr)
 OPTION(prefix_1, "fasm", fasm, Flag, f_Group, INVALID, nullptr, 0, 0, nullptr, nullptr, nullptr)
 OPTION(prefix_1, "fassociative-math", fassociative_math, Flag, f_Group, INVALID, nullptr, 0, 0, nullptr, nullptr, nullptr)
@@ -1602,6 +1604,8 @@ OPTION(prefix_1, "fpadding-on-unsigned-fixed-point", fpadding_on_unsigned_fixed_
 OPTION(prefix_1, "fparse-all-comments", fparse_all_comments, Flag, f_clang_Group, INVALID, nullptr, CC1Option, 0, nullptr, nullptr, nullptr)
 OPTION(prefix_1, "fpascal-strings", fpascal_strings, Flag, f_Group, INVALID, nullptr, CC1Option, 0,
        "Recognize and construct Pascal-style string literals", nullptr, nullptr)
+OPTION(prefix_1, "fpass-plugin=", fpass_plugin_EQ, Joined, f_Group, INVALID, nullptr, CC1Option, 0,
+       "Load pass plugin from a dynamic shared object file (only with new pass manager).", "<dsopath>", nullptr)
 OPTION(prefix_1, "fpcc-struct-return", fpcc_struct_return, Flag, f_Group, INVALID, nullptr, CC1Option, 0,
        "Override the default ABI to return all structs on the stack", nullptr, nullptr)
 OPTION(prefix_1, "fpch-preprocess", fpch_preprocess, Flag, f_Group, INVALID, nullptr, 0, 0, nullptr, nullptr, nullptr)
@@ -2248,6 +2252,7 @@ OPTION(prefix_1, "masm-verbose", masm_verbose, Flag, INVALID, INVALID, nullptr, 
 OPTION(prefix_1, "masm=", masm_EQ, Joined, m_Group, INVALID, nullptr, DriverOption, 0, nullptr, nullptr, nullptr)
 OPTION(prefix_1, "massembler-fatal-warnings", massembler_fatal_warnings, Flag, INVALID, INVALID, nullptr, CC1Option | CC1AsOption | NoDriverOption, 0,
        "Make assembler warnings fatal", nullptr, nullptr)
+OPTION(prefix_1, "matomics", matomics, Flag, m_wasm_Features_Group, INVALID, nullptr, 0, 0, nullptr, nullptr, nullptr)
 OPTION(prefix_1, "mavx2", mavx2, Flag, m_x86_Features_Group, INVALID, nullptr, CoreOption, 0, nullptr, nullptr, nullptr)
 OPTION(prefix_1, "mavx512bitalg", mavx512bitalg, Flag, m_x86_Features_Group, INVALID, nullptr, CoreOption, 0, nullptr, nullptr, nullptr)
 OPTION(prefix_1, "mavx512bw", mavx512bw, Flag, m_x86_Features_Group, INVALID, nullptr, CoreOption, 0, nullptr, nullptr, nullptr)
@@ -2272,6 +2277,7 @@ OPTION(prefix_1, "mbranch-likely", mbranch_likely, Flag, m_Group, INVALID, nullp
 OPTION(prefix_1, "mbranch-protection=", mbranch_protection_EQ, Joined, INVALID, INVALID, nullptr, 0, 0,
        "Enforce targets of indirect branches and function returns", nullptr, nullptr)
 OPTION(prefix_1, "mbranch-target-enforce", mbranch_target_enforce, Flag, INVALID, INVALID, nullptr, CC1Option | NoDriverOption, 0, nullptr, nullptr, nullptr)
+OPTION(prefix_1, "mbulk-memory", mbulk_memory, Flag, m_wasm_Features_Group, INVALID, nullptr, 0, 0, nullptr, nullptr, nullptr)
 OPTION(prefix_1, "mcheck-zero-division", mcheck_zero_division, Flag, m_mips_Features_Group, INVALID, nullptr, 0, 0, nullptr, nullptr, nullptr)
 OPTION(prefix_1, "mcldemote", mcldemote, Flag, m_x86_Features_Group, INVALID, nullptr, CoreOption, 0, nullptr, nullptr, nullptr)
 OPTION(prefix_1, "mclflushopt", mclflushopt, Flag, m_x86_Features_Group, INVALID, nullptr, CoreOption, 0, nullptr, nullptr, nullptr)
@@ -2491,6 +2497,7 @@ OPTION(prefix_1, "mno-abicalls", mno_abicalls, Flag, m_mips_Features_Group, INVA
 OPTION(prefix_1, "mno-adx", mno_adx, Flag, m_x86_Features_Group, INVALID, nullptr, CoreOption, 0, nullptr, nullptr, nullptr)
 OPTION(prefix_1, "mno-aes", mno_aes, Flag, m_x86_Features_Group, INVALID, nullptr, CoreOption, 0, nullptr, nullptr, nullptr)
 OPTION(prefix_1, "mno-altivec", mno_altivec, Flag, m_ppc_Features_Group, INVALID, nullptr, 0, 0, nullptr, nullptr, nullptr)
+OPTION(prefix_1, "mno-atomics", mno_atomics, Flag, m_wasm_Features_Group, INVALID, nullptr, 0, 0, nullptr, nullptr, nullptr)
 OPTION(prefix_1, "mno-avx2", mno_avx2, Flag, m_x86_Features_Group, INVALID, nullptr, CoreOption, 0, nullptr, nullptr, nullptr)
 OPTION(prefix_1, "mno-avx512bitalg", mno_avx512bitalg, Flag, m_x86_Features_Group, INVALID, nullptr, CoreOption, 0, nullptr, nullptr, nullptr)
 OPTION(prefix_1, "mno-avx512bw", mno_avx512bw, Flag, m_x86_Features_Group, INVALID, nullptr, CoreOption, 0, nullptr, nullptr, nullptr)
@@ -2510,6 +2517,7 @@ OPTION(prefix_1, "mno-backchain", mno_backchain, Flag, m_Group, INVALID, nullptr
 OPTION(prefix_1, "mno-bmi2", mno_bmi2, Flag, m_x86_Features_Group, INVALID, nullptr, CoreOption, 0, nullptr, nullptr, nullptr)
 OPTION(prefix_1, "mno-bmi", mno_bmi, Flag, m_x86_Features_Group, INVALID, nullptr, CoreOption, 0, nullptr, nullptr, nullptr)
 OPTION(prefix_1, "mno-branch-likely", mno_branch_likely, Flag, m_Group, INVALID, nullptr, HelpHidden, 0, nullptr, nullptr, nullptr)
+OPTION(prefix_1, "mno-bulk-memory", mno_bulk_memory, Flag, m_wasm_Features_Group, INVALID, nullptr, 0, 0, nullptr, nullptr, nullptr)
 OPTION(prefix_1, "mno-check-zero-division", mno_check_zero_division, Flag, m_mips_Features_Group, INVALID, nullptr, 0, 0, nullptr, nullptr, nullptr)
 OPTION(prefix_1, "mno-cldemote", mno_cldemote, Flag, m_x86_Features_Group, INVALID, nullptr, CoreOption, 0, nullptr, nullptr, nullptr)
 OPTION(prefix_1, "mno-clflushopt", mno_clflushopt, Flag, m_x86_Features_Group, INVALID, nullptr, CoreOption, 0, nullptr, nullptr, nullptr)
@@ -2626,7 +2634,7 @@ OPTION(prefix_1, "mno-rdseed", mno_rdseed, Flag, m_x86_Features_Group, INVALID, 
 OPTION(prefix_1, "mno-red-zone", mno_red_zone, Flag, m_Group, INVALID, nullptr, 0, 0, nullptr, nullptr, nullptr)
 OPTION(prefix_1, "mno-relax-all", mno_relax_all, Flag, m_Group, INVALID, nullptr, 0, 0, nullptr, nullptr, nullptr)
 OPTION(prefix_1, "mno-relax-pic-calls", mno_relax_pic_calls, Flag, m_mips_Features_Group, INVALID, nullptr, HelpHidden, 0,
-       "Do not try turning PIC calls (j{al}r{c} $25) into direct calls (MIPS only)", nullptr, nullptr)
+       "Do not produce relaxation hints for linkers to try optimizing PIC call sequences into direct calls (MIPS only)", nullptr, nullptr)
 OPTION(prefix_1, "mno-relax", mno_relax, Flag, m_riscv_Features_Group, INVALID, nullptr, 0, 0,
        "Disable linker relaxation", nullptr, nullptr)
 OPTION(prefix_1, "mno-restrict-it", mno_restrict_it, Flag, m_arm_Features_Group, INVALID, nullptr, 0, 0,
@@ -2745,7 +2753,7 @@ OPTION(prefix_1, "mregparm", mregparm, Separate, INVALID, INVALID, nullptr, CC1O
 OPTION(prefix_1, "mrelax-all", mrelax_all, Flag, m_Group, INVALID, nullptr, CC1Option | CC1AsOption, 0,
        "(integrated-as) Relax all machine instructions", nullptr, nullptr)
 OPTION(prefix_1, "mrelax-pic-calls", mrelax_pic_calls, Flag, m_mips_Features_Group, INVALID, nullptr, HelpHidden, 0,
-       "Try turning PIC calls (j{al}r{c} $25) into direct calls (MIPS only)", nullptr, nullptr)
+       "Produce relaxation hints for linkers to try optimizing PIC call sequences into direct calls (MIPS only)", nullptr, nullptr)
 OPTION(prefix_3, "mrelax-relocations", mrelax_relocations, Flag, INVALID, INVALID, nullptr, CC1Option | CC1AsOption | NoDriverOption, 0,
        "Use relaxable elf relocations", nullptr, nullptr)
 OPTION(prefix_1, "mrelax", mrelax, Flag, m_riscv_Features_Group, INVALID, nullptr, 0, 0,
@@ -2873,7 +2881,7 @@ OPTION(prefix_1, "no-cpp-precomp", no_cpp_precomp, Flag, clang_ignored_f_Group, 
 OPTION(prefix_3, "no-cuda-gpu-arch=", no_cuda_gpu_arch_EQ, Joined, INVALID, INVALID, nullptr, DriverOption, 0,
        "Remove GPU architecture (e.g. sm_35) from the list of GPUs to compile for. 'all' resets the list to its default value.", nullptr, nullptr)
 OPTION(prefix_3, "no-cuda-include-ptx=", no_cuda_include_ptx_EQ, Joined, INVALID, INVALID, nullptr, DriverOption, 0,
-       "Do not include PTX for the follwing GPU architecture (e.g. sm_35) or 'all'. May be specified more than once.", nullptr, nullptr)
+       "Do not include PTX for the following GPU architecture (e.g. sm_35) or 'all'. May be specified more than once.", nullptr, nullptr)
 OPTION(prefix_3, "no-cuda-noopt-device-debug", no_cuda_noopt_device_debug, Flag, INVALID, INVALID, nullptr, 0, 0, nullptr, nullptr, nullptr)
 OPTION(prefix_3, "no-cuda-version-check", no_cuda_version_check, Flag, INVALID, INVALID, nullptr, 0, 0,
        "Don't error out if the detected version of the CUDA install is too low for the requested CUDA gpu architecture.", nullptr, nullptr)

@@ -1305,6 +1305,15 @@
         return 2;
     break;
   }
+  case AT_ObjCNonLazyClass: {
+    if (Name == "objc_nonlazy_class" && SyntaxUsed == 0 && Scope == "")
+        return 0;
+    if (Name == "objc_nonlazy_class" && SyntaxUsed == 1 && Scope == "clang")
+        return 1;
+    if (Name == "objc_nonlazy_class" && SyntaxUsed == 2 && Scope == "clang")
+        return 2;
+    break;
+  }
   case AT_ObjCOwnership: {
     if (Name == "objc_ownership" && SyntaxUsed == 0 && Scope == "")
         return 0;
@@ -2045,6 +2054,24 @@
         return 0;
     if (Name == "weakref" && SyntaxUsed == 1 && Scope == "gnu")
         return 1;
+    break;
+  }
+  case AT_WebAssemblyImportModule: {
+    if (Name == "import_module" && SyntaxUsed == 0 && Scope == "")
+        return 0;
+    if (Name == "import_module" && SyntaxUsed == 1 && Scope == "clang")
+        return 1;
+    if (Name == "import_module" && SyntaxUsed == 2 && Scope == "clang")
+        return 2;
+    break;
+  }
+  case AT_WebAssemblyImportName: {
+    if (Name == "import_name" && SyntaxUsed == 0 && Scope == "")
+        return 0;
+    if (Name == "import_name" && SyntaxUsed == 1 && Scope == "clang")
+        return 1;
+    if (Name == "import_name" && SyntaxUsed == 2 && Scope == "clang")
+        return 2;
     break;
   }
   case AT_WorkGroupSizeHint: {

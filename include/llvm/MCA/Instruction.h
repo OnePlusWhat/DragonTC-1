@@ -332,6 +332,10 @@ struct InstrDesc {
   unsigned MaxLatency;
   // Number of MicroOps for this instruction.
   unsigned NumMicroOps;
+  // SchedClassID used to construct this InstrDesc.
+  // This information is currently used by views to do fast queries on the
+  // subtarget when computing the reciprocal throughput.
+  unsigned SchedClassID;
 
   bool MayLoad;
   bool MayStore;
@@ -405,12 +409,12 @@ public:
 /// that are sent to the various components of the simulated hardware pipeline.
 class Instruction : public InstructionBase {
   enum InstrStage {
-    IS_INVALID,   // Instruction in an invalid state.
-    IS_AVAILABLE, // Instruction dispatched but operands are not ready.
-    IS_READY,     // Instruction dispatched and operands ready.
-    IS_EXECUTING, // Instruction issued.
-    IS_EXECUTED,  // Instruction executed. Values are written back.
-    IS_RETIRED    // Instruction retired.
+    IS_INVALID,    // Instruction in an invalid state.
+    IS_DISPATCHED, // Instruction dispatched but operands are not ready.
+    IS_READY,      // Instruction dispatched and operands ready.
+    IS_EXECUTING,  // Instruction issued.
+    IS_EXECUTED,   // Instruction executed. Values are written back.
+    IS_RETIRED     // Instruction retired.
   };
 
   // The current instruction stage.
@@ -440,7 +444,7 @@ public:
   // all the definitions.
   void execute();
 
-  // Force a transition from the IS_AVAILABLE state to the IS_READY state if
+  // Force a transition from the IS_DISPATCHED state to the IS_READY state if
   // input operands are all ready. State transitions normally occur at the
   // beginning of a new cycle (see method cycleEvent()). However, the scheduler
   // may decide to promote instructions from the wait queue to the ready queue
@@ -448,7 +452,7 @@ public:
   // instruction might have changed in state.
   void update();
 
-  bool isDispatched() const { return Stage == IS_AVAILABLE; }
+  bool isDispatched() const { return Stage == IS_DISPATCHED; }
   bool isReady() const { return Stage == IS_READY; }
   bool isExecuting() const { return Stage == IS_EXECUTING; }
   bool isExecuted() const { return Stage == IS_EXECUTED; }
@@ -460,7 +464,7 @@ public:
                   [](const WriteState &W) { return W.isEliminated(); });
   }
 
-  // Forces a transition from state IS_AVAILABLE to state IS_EXECUTED.
+  // Forces a transition from state IS_DISPATCHED to state IS_EXECUTED.
   void forceExecuted();
 
   void retire() {

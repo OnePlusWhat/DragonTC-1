@@ -94,9 +94,6 @@ namespace llvm {
     enum { NumLowBitsAvailable = clang::TypeAlignmentInBits };
   };
 
-  template <>
-  struct isPodLike<clang::QualType> { static const bool value = true; };
-
 } // namespace llvm
 
 namespace clang {
@@ -1124,6 +1121,12 @@ public:
   };
 
   /// Check if this is a non-trivial type that would cause a C struct
+  /// transitively containing this type to be non-trivial. This function can be
+  /// used to determine whether a field of this type can be declared inside a C
+  /// union.
+  bool isNonTrivialPrimitiveCType(const ASTContext &Ctx) const;
+
+  /// Check if this is a non-trivial type that would cause a C struct
   /// transitively containing this type to be non-trivial to copy and return the
   /// kind.
   PrimitiveCopyKind isNonTrivialToPrimitiveCopy() const;
@@ -1985,7 +1988,7 @@ public:
   bool isObjCQualifiedClassType() const;        // Class<foo>
   bool isObjCObjectOrInterfaceType() const;
   bool isObjCIdType() const;                    // id
-
+  bool isDecltypeType() const;
   /// Was this type written with the special inert-in-ARC __unsafe_unretained
   /// qualifier?
   ///
@@ -3904,7 +3907,7 @@ public:
     EPI.Variadic = isVariadic();
     EPI.HasTrailingReturn = hasTrailingReturn();
     EPI.ExceptionSpec.Type = getExceptionSpecType();
-    EPI.TypeQuals = getTypeQuals();
+    EPI.TypeQuals = getMethodQuals();
     EPI.RefQualifier = getRefQualifier();
     if (EPI.ExceptionSpec.Type == EST_Dynamic) {
       EPI.ExceptionSpec.Exceptions = exceptions();
@@ -4014,7 +4017,7 @@ public:
   /// Whether this function prototype has a trailing return type.
   bool hasTrailingReturn() const { return FunctionTypeBits.HasTrailingReturn; }
 
-  Qualifiers getTypeQuals() const {
+  Qualifiers getMethodQuals() const {
     if (hasExtQualifiers())
       return *getTrailingObjects<Qualifiers>();
     else
@@ -6441,6 +6444,10 @@ inline bool Type::isObjCSelType() const {
 
 inline bool Type::isObjCBuiltinType() const {
   return isObjCIdType() || isObjCClassType() || isObjCSelType();
+}
+
+inline bool Type::isDecltypeType() const {
+  return isa<DecltypeType>(this);
 }
 
 #define IMAGE_TYPE(ImgType, Id, SingletonId, Access, Suffix) \

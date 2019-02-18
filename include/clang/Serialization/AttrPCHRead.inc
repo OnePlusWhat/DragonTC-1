@@ -383,7 +383,8 @@
     std::string message= Record.readString();
     bool strict = Record.readInt();
     std::string replacement= Record.readString();
-    New = new (Context) AvailabilityAttr(Range, Context, platform, introduced, deprecated, obsoleted, unavailable, message, strict, replacement, Spelling);
+    int priority = Record.readInt();
+    New = new (Context) AvailabilityAttr(Range, Context, platform, introduced, deprecated, obsoleted, unavailable, message, strict, replacement, priority, Spelling);
     cast<InheritableAttr>(New)->setInherited(isInherited);
     New->setImplicit(isImplicit);
     break;
@@ -1748,6 +1749,13 @@
     New->setImplicit(isImplicit);
     break;
   }
+  case attr::ObjCNonLazyClass: {
+    bool isImplicit = Record.readInt();
+    unsigned Spelling = Record.readInt();
+    New = new (Context) ObjCNonLazyClassAttr(Range, Context, Spelling);
+    New->setImplicit(isImplicit);
+    break;
+  }
   case attr::ObjCOwnership: {
     bool isInherited = Record.readInt();
     bool isImplicit = Record.readInt();
@@ -2615,6 +2623,26 @@
     unsigned Spelling = Record.readInt();
     std::string aliasee= Record.readString();
     New = new (Context) WeakRefAttr(Range, Context, aliasee, Spelling);
+    cast<InheritableAttr>(New)->setInherited(isInherited);
+    New->setImplicit(isImplicit);
+    break;
+  }
+  case attr::WebAssemblyImportModule: {
+    bool isInherited = Record.readInt();
+    bool isImplicit = Record.readInt();
+    unsigned Spelling = Record.readInt();
+    std::string importModule= Record.readString();
+    New = new (Context) WebAssemblyImportModuleAttr(Range, Context, importModule, Spelling);
+    cast<InheritableAttr>(New)->setInherited(isInherited);
+    New->setImplicit(isImplicit);
+    break;
+  }
+  case attr::WebAssemblyImportName: {
+    bool isInherited = Record.readInt();
+    bool isImplicit = Record.readInt();
+    unsigned Spelling = Record.readInt();
+    std::string importName= Record.readString();
+    New = new (Context) WebAssemblyImportNameAttr(Range, Context, importName, Spelling);
     cast<InheritableAttr>(New)->setInherited(isInherited);
     New->setImplicit(isImplicit);
     break;

@@ -406,7 +406,9 @@ enum RMWOperations {
   RMW_MAX = 7,
   RMW_MIN = 8,
   RMW_UMAX = 9,
-  RMW_UMIN = 10
+  RMW_UMIN = 10,
+  RMW_FADD = 11,
+  RMW_FSUB = 12
 };
 
 /// OverflowingBinaryOperatorOptionalFlags - Flags for serializing
@@ -533,6 +535,8 @@ enum FunctionCodes {
   // 54 is unused.
   FUNC_CODE_OPERAND_BUNDLE = 55, // OPERAND_BUNDLE: [tag#, value...]
   FUNC_CODE_INST_UNOP = 56,      // UNOP:       [opcode, ty, opval]
+  FUNC_CODE_INST_CALLBR = 57,    // CALLBR:     [attr, cc, norm, transfs,
+                                 //              fnty, fnid, args...]
 };
 
 enum UseListCodes {

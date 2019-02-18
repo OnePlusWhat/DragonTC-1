@@ -12,25 +12,21 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_ANALYZER_CORE_RETAINSUMMARYMANAGER
-#define LLVM_CLANG_ANALYZER_CORE_RETAINSUMMARYMANAGER
+#ifndef LLVM_CLANG_ANALYSIS_RETAINSUMMARY_MANAGER_H
+#define LLVM_CLANG_ANALYSIS_RETAINSUMMARY_MANAGER_H
 
 #include "llvm/ADT/DenseMap.h"
 #include "llvm/ADT/FoldingSet.h"
+#include "llvm/ADT/ImmutableMap.h"
 #include "clang/AST/Attr.h"
 #include "clang/AST/DeclCXX.h"
 #include "clang/AST/DeclObjC.h"
 #include "clang/AST/ParentMap.h"
+#include "clang/Analysis/AnyCall.h"
 #include "clang/Analysis/SelectorExtras.h"
-#include "clang/StaticAnalyzer/Core/PathSensitive/CallEvent.h"
 #include "llvm/ADT/STLExtras.h"
 
-//===----------------------------------------------------------------------===//
-// Adapters for FoldingSet.
-//===----------------------------------------------------------------------===//
-
 using namespace clang;
-using namespace ento;
 
 namespace clang {
 namespace ento {
@@ -207,40 +203,6 @@ public:
   }
 };
 
-/// Encapsulates the retain count semantics on the arguments, return value,
-/// and receiver (if any) of a function/method call.
-///
-/// Note that construction of these objects is not highly efficient.  That
-/// is okay for clients where creating these objects isn't really a bottleneck.
-/// The purpose of the API is to provide something simple.  The actual
-/// static analyzer checker that implements retain/release typestate
-/// tracking uses something more efficient.
-class CallEffects {
-  llvm::SmallVector<ArgEffect, 10> Args;
-  RetEffect Ret;
-  ArgEffect Receiver;
-
-  CallEffects(const RetEffect &R,
-              ArgEffect Receiver = ArgEffect(DoNothing, ObjKind::AnyObj))
-      : Ret(R), Receiver(Receiver) {}
-
-public:
-  /// Returns the argument effects for a call.
-  ArrayRef<ArgEffect> getArgs() const { return Args; }
-
-  /// Returns the effects on the receiver.
-  ArgEffect getReceiver() const { return Receiver; }
-
-  /// Returns the effect on the return value.
-  RetEffect getReturnValue() const { return Ret; }
-
-  /// Return the CallEfect for a given Objective-C method.
-  static CallEffects getEffect(const ObjCMethodDecl *MD);
-
-  /// Return the CallEfect for a given C/C++ function.
-  static CallEffects getEffect(const FunctionDecl *FD);
-};
-
 /// A key identifying a summary.
 class ObjCSummaryKey {
   IdentifierInfo* II;
@@ -262,9 +224,13 @@ public:
 } // end namespace ento
 } // end namespace clang
 
+using namespace ento;
 
 namespace llvm {
 
+//===----------------------------------------------------------------------===//
+// Adapters for FoldingSet.
+//===----------------------------------------------------------------------===//
 template <> struct FoldingSetTrait<ArgEffect> {
 static inline void Profile(const ArgEffect X, FoldingSetNodeID &ID) {
   ID.AddInteger((unsigned) X.getKind());
@@ -378,6 +344,8 @@ public:
   /// \return the effect on the "this" receiver of the method call.
   /// This is only meaningful if the summary applies to CXXMethodDecl*.
   ArgEffect getThisEffect() const { return This; }
+
+  ArgEffect getDefaultEffect() const { return DefaultArgEffect; }
 
   /// Set the effect of the method on "this".
   void setThisEffect(ArgEffect e) { This = e; }
@@ -653,19 +621,15 @@ class RetainSummaryManager {
                                   RetainSummaryTemplate &Template);
 
 public:
-  RetainSummaryManager(ASTContext &ctx,
-                       bool usesARC,
-                       bool trackObjCAndCFObjects,
+  RetainSummaryManager(ASTContext &ctx, bool trackObjCAndCFObjects,
                        bool trackOSObjects)
-   : Ctx(ctx),
-     ARCEnabled(usesARC),
-     TrackObjCAndCFObjects(trackObjCAndCFObjects),
-     TrackOSObjects(trackOSObjects),
-     AF(BPAlloc),
-     ObjCAllocRetE(usesARC ? RetEffect::MakeNotOwned(ObjKind::ObjC)
-                               : RetEffect::MakeOwned(ObjKind::ObjC)),
-     ObjCInitRetE(usesARC ? RetEffect::MakeNotOwned(ObjKind::ObjC)
-                               : RetEffect::MakeOwnedWhenTrackedReceiver()) {
+      : Ctx(ctx), ARCEnabled((bool)Ctx.getLangOpts().ObjCAutoRefCount),
+        TrackObjCAndCFObjects(trackObjCAndCFObjects),
+        TrackOSObjects(trackOSObjects), AF(BPAlloc),
+        ObjCAllocRetE(ARCEnabled ? RetEffect::MakeNotOwned(ObjKind::ObjC)
+                                 : RetEffect::MakeOwned(ObjKind::ObjC)),
+        ObjCInitRetE(ARCEnabled ? RetEffect::MakeNotOwned(ObjKind::ObjC)
+                                : RetEffect::MakeOwnedWhenTrackedReceiver()) {
     InitializeClassMethodSummaries();
     InitializeMethodSummaries();
   }
@@ -676,6 +640,9 @@ public:
 
     // Function returns the first argument.
     Identity,
+
+    // Function returns "this" argument.
+    IdentityThis,
 
     // Function either returns zero, or the input parameter.
     IdentityOrZero
@@ -688,10 +655,20 @@ public:
   /// implementation (that is, everything about it is inlineable).
   static bool isKnownSmartPointer(QualType QT);
 
-  bool isTrustedReferenceCountImplementation(const FunctionDecl *FD);
+  bool isTrustedReferenceCountImplementation(const Decl *FD);
 
-  const RetainSummary *getSummary(const CallEvent &Call,
-                                  QualType ReceiverType=QualType());
+  const RetainSummary *getSummary(AnyCall C,
+                                  bool HasNonZeroCallbackArg=false,
+                                  bool IsReceiverUnconsumedSelf=false,
+                                  QualType ReceiverType={});
+
+  RetEffect getObjAllocRetEffect() const { return ObjCAllocRetE; }
+
+private:
+
+  /// getMethodSummary - This version of getMethodSummary is used to query
+  ///  the summary for the current method being analyzed.
+  const RetainSummary *getMethodSummary(const ObjCMethodDecl *MD);
 
   const RetainSummary *getFunctionSummary(const FunctionDecl *FD);
 
@@ -701,32 +678,9 @@ public:
                                         ObjCMethodSummariesTy &CachedSummaries);
 
   const RetainSummary *
-  getInstanceMethodSummary(const ObjCMethodCall &M,
-                           QualType ReceiverType);
+  getInstanceMethodSummary(const ObjCMessageExpr *ME, QualType ReceiverType);
 
-  const RetainSummary *getClassMethodSummary(const ObjCMethodCall &M) {
-    assert(!M.isInstanceMessage());
-    const ObjCInterfaceDecl *Class = M.getReceiverInterface();
-
-    return getMethodSummary(M.getSelector(), Class, M.getDecl(),
-                            M.getResultType(), ObjCClassMethodSummaries);
-  }
-
-  /// getMethodSummary - This version of getMethodSummary is used to query
-  ///  the summary for the current method being analyzed.
-  const RetainSummary *getMethodSummary(const ObjCMethodDecl *MD) {
-    const ObjCInterfaceDecl *ID = MD->getClassInterface();
-    Selector S = MD->getSelector();
-    QualType ResultTy = MD->getReturnType();
-
-    ObjCMethodSummariesTy *CachedSummaries;
-    if (MD->isInstanceMethod())
-      CachedSummaries = &ObjCMethodSummaries;
-    else
-      CachedSummaries = &ObjCClassMethodSummaries;
-
-    return getMethodSummary(S, ID, MD, ResultTy, *CachedSummaries);
-  }
+  const RetainSummary *getClassMethodSummary(const ObjCMessageExpr *ME);
 
   const RetainSummary *getStandardMethodSummary(const ObjCMethodDecl *MD,
                                                 Selector S, QualType RetTy);
@@ -741,13 +695,25 @@ public:
   void updateSummaryFromAnnotations(const RetainSummary *&Summ,
                                     const FunctionDecl *FD);
 
+  const RetainSummary *updateSummaryForNonZeroCallbackArg(const RetainSummary *S,
+                                                          AnyCall &C);
 
-  void updateSummaryForCall(const RetainSummary *&Summ,
-                            const CallEvent &Call);
+  /// Special case '[super init];' and '[self init];'
+  ///
+  /// Even though calling '[super init]' without assigning the result to self
+  /// and checking if the parent returns 'nil' is a bad pattern, it is common.
+  /// Additionally, our Self Init checker already warns about it. To avoid
+  /// overwhelming the user with messages from both checkers, we model the case
+  /// of '[super init]' in cases when it is not consumed by another expression
+  /// as if the call preserves the value of 'self'; essentially, assuming it can
+  /// never fail and return 'nil'.
+  /// Note, we don't want to just stop tracking the value since we want the
+  /// RetainCount checker to report leaks and use-after-free if SelfInit checker
+  /// is turned off.
+  void updateSummaryForReceiverUnconsumedSelf(const RetainSummary *&S);
 
-  bool isARCEnabled() const { return ARCEnabled; }
-
-  RetEffect getObjAllocRetEffect() const { return ObjCAllocRetE; }
+  /// Set argument types for arguments which are not doing anything.
+  void updateSummaryForArgumentTypes(const AnyCall &C, const RetainSummary *&RS);
 
   /// Determine whether a declaration {@code D} of correspondent type (return
   /// type for functions/methods) {@code QT} has any of the given attributes,

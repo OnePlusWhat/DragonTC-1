@@ -121,9 +121,6 @@ public:
   using GOTEquivUsePair = std::pair<const GlobalVariable *, unsigned>;
   MapVector<const MCSymbol *, GOTEquivUsePair> GlobalGOTEquivs;
 
-  /// Enable print [latency:throughput] in output.
-  bool EnablePrintSchedInfo = false;
-
 private:
   MCSymbol *CurrentFnBegin = nullptr;
   MCSymbol *CurrentFnEnd = nullptr;
@@ -225,6 +222,9 @@ public:
   const MCSubtargetInfo &getSubtargetInfo() const;
 
   void EmitToStreamer(MCStreamer &S, const MCInst &Inst);
+
+  /// Emits inital debug location directive.
+  void emitInitialRawDwarfLocDirective(const MachineFunction &MF);
 
   /// Return the current section we are emitting to.
   const MCSection *getCurrentSection() const;

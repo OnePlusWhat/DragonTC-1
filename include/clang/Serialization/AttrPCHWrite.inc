@@ -301,6 +301,7 @@ Record.push_back(SA->getInterrupt());
     Record.AddString(SA->getMessage());
     Record.push_back(SA->getStrict());
     Record.AddString(SA->getReplacement());
+    Record.push_back(SA->getPriority());
     break;
   }
   case attr::Blocks: {
@@ -1359,6 +1360,11 @@ Record.push_back(SA->getFamily());
     Record.push_back(A->getSpellingListIndex());
     break;
   }
+  case attr::ObjCNonLazyClass: {
+    Record.push_back(A->isImplicit());
+    Record.push_back(A->getSpellingListIndex());
+    break;
+  }
   case attr::ObjCOwnership: {
     const auto *SA = cast<ObjCOwnershipAttr>(A);
     Record.push_back(SA->isInherited());
@@ -2028,6 +2034,22 @@ Record.push_back(SA->getVisibility());
     Record.push_back(A->isImplicit());
     Record.push_back(A->getSpellingListIndex());
     Record.AddString(SA->getAliasee());
+    break;
+  }
+  case attr::WebAssemblyImportModule: {
+    const auto *SA = cast<WebAssemblyImportModuleAttr>(A);
+    Record.push_back(SA->isInherited());
+    Record.push_back(A->isImplicit());
+    Record.push_back(A->getSpellingListIndex());
+    Record.AddString(SA->getImportModule());
+    break;
+  }
+  case attr::WebAssemblyImportName: {
+    const auto *SA = cast<WebAssemblyImportNameAttr>(A);
+    Record.push_back(SA->isInherited());
+    Record.push_back(A->isImplicit());
+    Record.push_back(A->getSpellingListIndex());
+    Record.AddString(SA->getImportName());
     break;
   }
   case attr::WorkGroupSizeHint: {

@@ -115,6 +115,7 @@
     OS << " \"" << SA->getMessage() << "\"";
     if (SA->getStrict()) OS << " Strict";
     OS << " \"" << SA->getReplacement() << "\"";
+    OS << " " << SA->getPriority();
   }
   void VisitBlocksAttr(const BlocksAttr *A) {
     const auto *SA = cast<BlocksAttr>(A); (void)SA;
@@ -721,6 +722,14 @@
   void VisitWeakRefAttr(const WeakRefAttr *A) {
     const auto *SA = cast<WeakRefAttr>(A); (void)SA;
     OS << " \"" << SA->getAliasee() << "\"";
+  }
+  void VisitWebAssemblyImportModuleAttr(const WebAssemblyImportModuleAttr *A) {
+    const auto *SA = cast<WebAssemblyImportModuleAttr>(A); (void)SA;
+    OS << " \"" << SA->getImportModule() << "\"";
+  }
+  void VisitWebAssemblyImportNameAttr(const WebAssemblyImportNameAttr *A) {
+    const auto *SA = cast<WebAssemblyImportNameAttr>(A); (void)SA;
+    OS << " \"" << SA->getImportName() << "\"";
   }
   void VisitWorkGroupSizeHintAttr(const WorkGroupSizeHintAttr *A) {
     const auto *SA = cast<WorkGroupSizeHintAttr>(A); (void)SA;
