@@ -463,6 +463,10 @@ Attr *instantiateTemplateAttribute(const Attr *At, ASTContext &C, Sema &S,
       const auto *A = cast<FormatArgAttr>(At);
       return A->clone(C);
     }
+    case attr::FortifyStdLib: {
+      const auto *A = cast<FortifyStdLibAttr>(At);
+      return A->clone(C);
+    }
     case attr::GNUInline: {
       const auto *A = cast<GNUInlineAttr>(At);
       return A->clone(C);
@@ -1567,6 +1571,9 @@ Attr *instantiateTemplateAttributeForDecl(const Attr *At,
       return nullptr;
     }
     case attr::FormatArg: {
+      return nullptr;
+    }
+    case attr::FortifyStdLib: {
       return nullptr;
     }
     case attr::GNUInline: {

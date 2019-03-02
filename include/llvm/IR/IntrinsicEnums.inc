@@ -5566,12 +5566,14 @@
     wasm_atomic_wait_i32,                      // llvm.wasm.atomic.wait.i32
     wasm_atomic_wait_i64,                      // llvm.wasm.atomic.wait.i64
     wasm_bitselect,                            // llvm.wasm.bitselect
+    wasm_data_drop,                            // llvm.wasm.data.drop
     wasm_extract_exception,                    // llvm.wasm.extract.exception
     wasm_get_ehselector,                       // llvm.wasm.get.ehselector
     wasm_get_exception,                        // llvm.wasm.get.exception
     wasm_landingpad_index,                     // llvm.wasm.landingpad.index
     wasm_lsda,                                 // llvm.wasm.lsda
     wasm_memory_grow,                          // llvm.wasm.memory.grow
+    wasm_memory_init,                          // llvm.wasm.memory.init
     wasm_memory_size,                          // llvm.wasm.memory.size
     wasm_rethrow,                              // llvm.wasm.rethrow
     wasm_sub_saturate_signed,                  // llvm.wasm.sub.saturate.signed

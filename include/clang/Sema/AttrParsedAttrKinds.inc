@@ -829,7 +829,7 @@ static ParsedAttr::Kind getAttrKind(StringRef Name, ParsedAttr::Syntax Syntax) {
       return ParsedAttr::AT_XRayLogArgs;	 // "xray_log_args"
     }
     break;
-  case 14:	 // 12 strings to match.
+  case 14:	 // 13 strings to match.
     switch (Name[0]) {
     default: break;
     case 'a':	 // 3 strings to match.
@@ -857,6 +857,10 @@ static ParsedAttr::Kind getAttrKind(StringRef Name, ParsedAttr::Syntax Syntax) {
       if (memcmp(Name.data()+1, "evice_builtin", 13) != 0)
         break;
       return ParsedAttr::IgnoredAttribute;	 // "device_builtin"
+    case 'f':	 // 1 string to match.
+      if (memcmp(Name.data()+1, "ortify_stdlib", 13) != 0)
+        break;
+      return ParsedAttr::AT_FortifyStdLib;	 // "fortify_stdlib"
     case 'i':	 // 1 string to match.
       if (memcmp(Name.data()+1, "ntel_ocl_bicc", 13) != 0)
         break;
@@ -2596,7 +2600,7 @@ static ParsedAttr::Kind getAttrKind(StringRef Name, ParsedAttr::Syntax Syntax) {
       return ParsedAttr::AT_ReturnsNonNull;	 // "gnu::returns_nonnull"
     }
     break;
-  case 21:	 // 6 strings to match.
+  case 21:	 // 7 strings to match.
     if (memcmp(Name.data()+0, "clang::", 7) != 0)
       break;
     switch (Name[7]) {
@@ -2605,6 +2609,10 @@ static ParsedAttr::Kind getAttrKind(StringRef Name, ParsedAttr::Syntax Syntax) {
       if (memcmp(Name.data()+8, "lways_destroy", 13) != 0)
         break;
       return ParsedAttr::AT_AlwaysDestroy;	 // "clang::always_destroy"
+    case 'f':	 // 1 string to match.
+      if (memcmp(Name.data()+8, "ortify_stdlib", 13) != 0)
+        break;
+      return ParsedAttr::AT_FortifyStdLib;	 // "clang::fortify_stdlib"
     case 'i':	 // 1 string to match.
       if (memcmp(Name.data()+8, "ntel_ocl_bicc", 13) != 0)
         break;
@@ -3534,19 +3542,30 @@ static ParsedAttr::Kind getAttrKind(StringRef Name, ParsedAttr::Syntax Syntax) {
       return ParsedAttr::AT_XRayLogArgs;	 // "clang::xray_log_args"
     }
     break;
-  case 21:	 // 2 strings to match.
-    if (memcmp(Name.data()+0, "clang::objc_", 12) != 0)
+  case 21:	 // 3 strings to match.
+    if (memcmp(Name.data()+0, "clang::", 7) != 0)
       break;
-    switch (Name[12]) {
+    switch (Name[7]) {
     default: break;
-    case 'e':	 // 1 string to match.
-      if (memcmp(Name.data()+13, "xception", 8) != 0)
+    case 'f':	 // 1 string to match.
+      if (memcmp(Name.data()+8, "ortify_stdlib", 13) != 0)
         break;
-      return ParsedAttr::AT_ObjCException;	 // "clang::objc_exception"
-    case 'o':	 // 1 string to match.
-      if (memcmp(Name.data()+13, "wnership", 8) != 0)
+      return ParsedAttr::AT_FortifyStdLib;	 // "clang::fortify_stdlib"
+    case 'o':	 // 2 strings to match.
+      if (memcmp(Name.data()+8, "bjc_", 4) != 0)
         break;
-      return ParsedAttr::AT_ObjCOwnership;	 // "clang::objc_ownership"
+      switch (Name[12]) {
+      default: break;
+      case 'e':	 // 1 string to match.
+        if (memcmp(Name.data()+13, "xception", 8) != 0)
+          break;
+        return ParsedAttr::AT_ObjCException;	 // "clang::objc_exception"
+      case 'o':	 // 1 string to match.
+        if (memcmp(Name.data()+13, "wnership", 8) != 0)
+          break;
+        return ParsedAttr::AT_ObjCOwnership;	 // "clang::objc_ownership"
+      }
+      break;
     }
     break;
   case 22:	 // 5 strings to match.

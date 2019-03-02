@@ -222,7 +222,6 @@ DIAG(err_omp_unknown_map_type_modifier, CLASS_ERROR, (unsigned)diag::Severity::E
 DIAG(err_opencl_logical_exclusive_or, CLASS_ERROR, (unsigned)diag::Severity::Error, "^^ is a reserved operator in OpenCL", 0, SFINAE_SubstitutionFailure, false, true, 4)
 DIAG(err_opencl_taking_function_address_parser, CLASS_ERROR, (unsigned)diag::Severity::Error, "taking address of function is not allowed", 0, SFINAE_SubstitutionFailure, false, true, 4)
 DIAG(err_opencl_unroll_hint_on_non_loop, CLASS_ERROR, (unsigned)diag::Severity::Error, "OpenCL only supports 'opencl_unroll_hint' attribute on for, while, and do statements", 0, SFINAE_SubstitutionFailure, false, true, 4)
-DIAG(err_openclcxx_reserved, CLASS_ERROR, (unsigned)diag::Severity::Error, "'%0' is a reserved keyword in OpenCL C++", 0, SFINAE_SubstitutionFailure, false, true, 4)
 DIAG(err_openclcxx_virtual_function, CLASS_ERROR, (unsigned)diag::Severity::Error, "virtual functions are not supported in OpenCL C++", 0, SFINAE_SubstitutionFailure, false, true, 4)
 DIAG(err_out_of_line_constructor_template_id, CLASS_ERROR, (unsigned)diag::Severity::Error, "out-of-line constructor for %0 cannot have template arguments", 0, SFINAE_SubstitutionFailure, false, true, 4)
 DIAG(err_override_control_interface, CLASS_ERROR, (unsigned)diag::Severity::Error, "'%0' keyword not permitted with interface types", 0, SFINAE_SubstitutionFailure, false, true, 4)

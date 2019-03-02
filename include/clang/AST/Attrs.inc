@@ -3544,6 +3544,46 @@ public:
   static bool classof(const Attr *A) { return A->getKind() == attr::FormatArg; }
 };
 
+class FortifyStdLibAttr : public InheritableAttr {
+int type;
+
+int flag;
+
+public:
+  static FortifyStdLibAttr *CreateImplicit(ASTContext &Ctx, int Type, int Flag, SourceRange Loc = SourceRange()) {
+    auto *A = new (Ctx) FortifyStdLibAttr(Loc, Ctx, Type, Flag, 0);
+    A->setImplicit(true);
+    return A;
+  }
+
+  FortifyStdLibAttr(SourceRange R, ASTContext &Ctx
+              , int Type
+              , int Flag
+              , unsigned SI
+             )
+    : InheritableAttr(attr::FortifyStdLib, R, SI, false, false)
+              , type(Type)
+              , flag(Flag)
+  {
+  }
+
+  FortifyStdLibAttr *clone(ASTContext &C) const;
+  void printPretty(raw_ostream &OS,
+                   const PrintingPolicy &Policy) const;
+  const char *getSpelling() const;
+  int getType() const {
+    return type;
+  }
+
+  int getFlag() const {
+    return flag;
+  }
+
+
+
+  static bool classof(const Attr *A) { return A->getKind() == attr::FortifyStdLib; }
+};
+
 class GNUInlineAttr : public InheritableAttr {
 public:
   static GNUInlineAttr *CreateImplicit(ASTContext &Ctx, SourceRange Loc = SourceRange()) {

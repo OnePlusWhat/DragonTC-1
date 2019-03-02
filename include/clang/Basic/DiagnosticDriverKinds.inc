@@ -21,6 +21,7 @@ DIAG(err_drv_cc_print_options_failure, CLASS_ERROR, (unsigned)diag::Severity::Er
 DIAG(err_drv_clang_unsupported, CLASS_ERROR, (unsigned)diag::Severity::Error, "the clang compiler does not support '%0'", 0, SFINAE_SubstitutionFailure, false, true, 0)
 DIAG(err_drv_clang_unsupported_opt_cxx_darwin_i386, CLASS_ERROR, (unsigned)diag::Severity::Error, "the clang compiler does not support '%0' for C++ on Darwin/i386", 0, SFINAE_SubstitutionFailure, false, true, 0)
 DIAG(err_drv_clang_unsupported_opt_faltivec, CLASS_ERROR, (unsigned)diag::Severity::Error, "the clang compiler does not support '%0', %1", 0, SFINAE_SubstitutionFailure, false, true, 0)
+DIAG(err_drv_clang_unsupported_opt_pg_darwin, CLASS_ERROR, (unsigned)diag::Severity::Error, "the clang compiler does not support -pg option on %select{Darwin|versions of OS X 10.9 and later}0", 0, SFINAE_SubstitutionFailure, false, true, 0)
 DIAG(err_drv_command_failed, CLASS_ERROR, (unsigned)diag::Severity::Error, "%0 command failed with exit code %1 (use -v to see invocation)", 0, SFINAE_SubstitutionFailure, false, true, 0)
 DIAG(err_drv_command_failure, CLASS_ERROR, (unsigned)diag::Severity::Error, "unable to execute command: %0", 0, SFINAE_SubstitutionFailure, false, true, 0)
 DIAG(err_drv_command_signalled, CLASS_ERROR, (unsigned)diag::Severity::Error, "%0 command failed due to signal (use -v to see invocation)", 0, SFINAE_SubstitutionFailure, false, true, 0)

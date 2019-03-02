@@ -247,6 +247,11 @@
     const auto *SA = cast<FormatArgAttr>(A); (void)SA;
     OS << " " << SA->getFormatIdx().getSourceIndex();
   }
+  void VisitFortifyStdLibAttr(const FortifyStdLibAttr *A) {
+    const auto *SA = cast<FortifyStdLibAttr>(A); (void)SA;
+    OS << " " << SA->getType();
+    OS << " " << SA->getFlag();
+  }
   void VisitIBOutletCollectionAttr(const IBOutletCollectionAttr *A) {
     const auto *SA = cast<IBOutletCollectionAttr>(A); (void)SA;
     OS << " " << SA->getInterface().getAsString();

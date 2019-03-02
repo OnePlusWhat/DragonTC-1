@@ -925,6 +925,17 @@
     New->setImplicit(isImplicit);
     break;
   }
+  case attr::FortifyStdLib: {
+    bool isInherited = Record.readInt();
+    bool isImplicit = Record.readInt();
+    unsigned Spelling = Record.readInt();
+    int type = Record.readInt();
+    int flag = Record.readInt();
+    New = new (Context) FortifyStdLibAttr(Range, Context, type, flag, Spelling);
+    cast<InheritableAttr>(New)->setInherited(isInherited);
+    New->setImplicit(isImplicit);
+    break;
+  }
   case attr::GNUInline: {
     bool isInherited = Record.readInt();
     bool isImplicit = Record.readInt();

@@ -840,12 +840,40 @@ OPTION(prefix_1, "ffixed-r19", ffixed_r19, Flag, INVALID, INVALID, nullptr, 0, 0
        "Reserve register r19 (Hexagon only)", nullptr, nullptr)
 OPTION(prefix_1, "ffixed-r9", ffixed_r9, Flag, m_arm_Features_Group, INVALID, nullptr, 0, 0,
        "Reserve the r9 register (ARM only)", nullptr, nullptr)
+OPTION(prefix_1, "ffixed-x10", ffixed_x10, Flag, m_aarch64_Features_Group, INVALID, nullptr, 0, 0,
+       "Reserve the 10 register (AArch64 only)", nullptr, nullptr)
+OPTION(prefix_1, "ffixed-x11", ffixed_x11, Flag, m_aarch64_Features_Group, INVALID, nullptr, 0, 0,
+       "Reserve the 11 register (AArch64 only)", nullptr, nullptr)
+OPTION(prefix_1, "ffixed-x12", ffixed_x12, Flag, m_aarch64_Features_Group, INVALID, nullptr, 0, 0,
+       "Reserve the 12 register (AArch64 only)", nullptr, nullptr)
+OPTION(prefix_1, "ffixed-x13", ffixed_x13, Flag, m_aarch64_Features_Group, INVALID, nullptr, 0, 0,
+       "Reserve the 13 register (AArch64 only)", nullptr, nullptr)
+OPTION(prefix_1, "ffixed-x14", ffixed_x14, Flag, m_aarch64_Features_Group, INVALID, nullptr, 0, 0,
+       "Reserve the 14 register (AArch64 only)", nullptr, nullptr)
+OPTION(prefix_1, "ffixed-x15", ffixed_x15, Flag, m_aarch64_Features_Group, INVALID, nullptr, 0, 0,
+       "Reserve the 15 register (AArch64 only)", nullptr, nullptr)
 OPTION(prefix_1, "ffixed-x18", ffixed_x18, Flag, m_aarch64_Features_Group, INVALID, nullptr, 0, 0,
        "Reserve the 18 register (AArch64 only)", nullptr, nullptr)
 OPTION(prefix_1, "ffixed-x1", ffixed_x1, Flag, m_aarch64_Features_Group, INVALID, nullptr, 0, 0,
        "Reserve the 1 register (AArch64 only)", nullptr, nullptr)
 OPTION(prefix_1, "ffixed-x20", ffixed_x20, Flag, m_aarch64_Features_Group, INVALID, nullptr, 0, 0,
        "Reserve the 20 register (AArch64 only)", nullptr, nullptr)
+OPTION(prefix_1, "ffixed-x21", ffixed_x21, Flag, m_aarch64_Features_Group, INVALID, nullptr, 0, 0,
+       "Reserve the 21 register (AArch64 only)", nullptr, nullptr)
+OPTION(prefix_1, "ffixed-x22", ffixed_x22, Flag, m_aarch64_Features_Group, INVALID, nullptr, 0, 0,
+       "Reserve the 22 register (AArch64 only)", nullptr, nullptr)
+OPTION(prefix_1, "ffixed-x23", ffixed_x23, Flag, m_aarch64_Features_Group, INVALID, nullptr, 0, 0,
+       "Reserve the 23 register (AArch64 only)", nullptr, nullptr)
+OPTION(prefix_1, "ffixed-x24", ffixed_x24, Flag, m_aarch64_Features_Group, INVALID, nullptr, 0, 0,
+       "Reserve the 24 register (AArch64 only)", nullptr, nullptr)
+OPTION(prefix_1, "ffixed-x25", ffixed_x25, Flag, m_aarch64_Features_Group, INVALID, nullptr, 0, 0,
+       "Reserve the 25 register (AArch64 only)", nullptr, nullptr)
+OPTION(prefix_1, "ffixed-x26", ffixed_x26, Flag, m_aarch64_Features_Group, INVALID, nullptr, 0, 0,
+       "Reserve the 26 register (AArch64 only)", nullptr, nullptr)
+OPTION(prefix_1, "ffixed-x27", ffixed_x27, Flag, m_aarch64_Features_Group, INVALID, nullptr, 0, 0,
+       "Reserve the 27 register (AArch64 only)", nullptr, nullptr)
+OPTION(prefix_1, "ffixed-x28", ffixed_x28, Flag, m_aarch64_Features_Group, INVALID, nullptr, 0, 0,
+       "Reserve the 28 register (AArch64 only)", nullptr, nullptr)
 OPTION(prefix_1, "ffixed-x2", ffixed_x2, Flag, m_aarch64_Features_Group, INVALID, nullptr, 0, 0,
        "Reserve the 2 register (AArch64 only)", nullptr, nullptr)
 OPTION(prefix_1, "ffixed-x3", ffixed_x3, Flag, m_aarch64_Features_Group, INVALID, nullptr, 0, 0,
@@ -858,6 +886,8 @@ OPTION(prefix_1, "ffixed-x6", ffixed_x6, Flag, m_aarch64_Features_Group, INVALID
        "Reserve the 6 register (AArch64 only)", nullptr, nullptr)
 OPTION(prefix_1, "ffixed-x7", ffixed_x7, Flag, m_aarch64_Features_Group, INVALID, nullptr, 0, 0,
        "Reserve the 7 register (AArch64 only)", nullptr, nullptr)
+OPTION(prefix_1, "ffixed-x9", ffixed_x9, Flag, m_aarch64_Features_Group, INVALID, nullptr, 0, 0,
+       "Reserve the 9 register (AArch64 only)", nullptr, nullptr)
 OPTION(prefix_1, "ffloat-store", float_store_f, Flag, clang_ignored_gcc_optimization_f_Group, INVALID, nullptr, Ignored, 0, nullptr, nullptr, nullptr)
 OPTION(prefix_1, "ffor-scope", ffor_scope, Flag, f_Group, INVALID, nullptr, 0, 0, nullptr, nullptr, nullptr)
 OPTION(prefix_1, "fforbid-guard-variables", fforbid_guard_variables, Flag, INVALID, INVALID, nullptr, CC1Option | NoDriverOption, 0,
@@ -2252,7 +2282,6 @@ OPTION(prefix_1, "masm-verbose", masm_verbose, Flag, INVALID, INVALID, nullptr, 
 OPTION(prefix_1, "masm=", masm_EQ, Joined, m_Group, INVALID, nullptr, DriverOption, 0, nullptr, nullptr, nullptr)
 OPTION(prefix_1, "massembler-fatal-warnings", massembler_fatal_warnings, Flag, INVALID, INVALID, nullptr, CC1Option | CC1AsOption | NoDriverOption, 0,
        "Make assembler warnings fatal", nullptr, nullptr)
-OPTION(prefix_1, "matomics", matomics, Flag, m_wasm_Features_Group, INVALID, nullptr, 0, 0, nullptr, nullptr, nullptr)
 OPTION(prefix_1, "mavx2", mavx2, Flag, m_x86_Features_Group, INVALID, nullptr, CoreOption, 0, nullptr, nullptr, nullptr)
 OPTION(prefix_1, "mavx512bitalg", mavx512bitalg, Flag, m_x86_Features_Group, INVALID, nullptr, CoreOption, 0, nullptr, nullptr, nullptr)
 OPTION(prefix_1, "mavx512bw", mavx512bw, Flag, m_x86_Features_Group, INVALID, nullptr, CoreOption, 0, nullptr, nullptr, nullptr)
@@ -2497,7 +2526,6 @@ OPTION(prefix_1, "mno-abicalls", mno_abicalls, Flag, m_mips_Features_Group, INVA
 OPTION(prefix_1, "mno-adx", mno_adx, Flag, m_x86_Features_Group, INVALID, nullptr, CoreOption, 0, nullptr, nullptr, nullptr)
 OPTION(prefix_1, "mno-aes", mno_aes, Flag, m_x86_Features_Group, INVALID, nullptr, CoreOption, 0, nullptr, nullptr, nullptr)
 OPTION(prefix_1, "mno-altivec", mno_altivec, Flag, m_ppc_Features_Group, INVALID, nullptr, 0, 0, nullptr, nullptr, nullptr)
-OPTION(prefix_1, "mno-atomics", mno_atomics, Flag, m_wasm_Features_Group, INVALID, nullptr, 0, 0, nullptr, nullptr, nullptr)
 OPTION(prefix_1, "mno-avx2", mno_avx2, Flag, m_x86_Features_Group, INVALID, nullptr, CoreOption, 0, nullptr, nullptr, nullptr)
 OPTION(prefix_1, "mno-avx512bitalg", mno_avx512bitalg, Flag, m_x86_Features_Group, INVALID, nullptr, CoreOption, 0, nullptr, nullptr, nullptr)
 OPTION(prefix_1, "mno-avx512bw", mno_avx512bw, Flag, m_x86_Features_Group, INVALID, nullptr, CoreOption, 0, nullptr, nullptr, nullptr)

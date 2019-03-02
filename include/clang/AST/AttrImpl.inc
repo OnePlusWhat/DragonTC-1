@@ -3664,6 +3664,48 @@ const char *FormatArgAttr::getSpelling() const {
   }
 }
 
+FortifyStdLibAttr *FortifyStdLibAttr::clone(ASTContext &C) const {
+  auto *A = new (C) FortifyStdLibAttr(getLocation(), C, type, flag, getSpellingListIndex());
+  A->Inherited = Inherited;
+  A->IsPackExpansion = IsPackExpansion;
+  A->Implicit = Implicit;
+  return A;
+}
+
+void FortifyStdLibAttr::printPretty(raw_ostream &OS, const PrintingPolicy &Policy) const {
+  switch (SpellingListIndex) {
+  default:
+    llvm_unreachable("Unknown attribute spelling!");
+    break;
+  case 0 : {
+    OS << " __attribute__((fortify_stdlib(" << getType() << ", " << getFlag() << ")))";
+    break;
+  }
+  case 1 : {
+    OS << " [[clang::fortify_stdlib(" << getType() << ", " << getFlag() << ")]]";
+    break;
+  }
+  case 2 : {
+    OS << " [[clang::fortify_stdlib(" << getType() << ", " << getFlag() << ")]]";
+    break;
+  }
+}
+}
+
+const char *FortifyStdLibAttr::getSpelling() const {
+  switch (SpellingListIndex) {
+  default:
+    llvm_unreachable("Unknown attribute spelling!");
+    return "(No spelling)";
+  case 0:
+    return "fortify_stdlib";
+  case 1:
+    return "fortify_stdlib";
+  case 2:
+    return "fortify_stdlib";
+  }
+}
+
 GNUInlineAttr *GNUInlineAttr::clone(ASTContext &C) const {
   auto *A = new (C) GNUInlineAttr(getLocation(), C, getSpellingListIndex());
   A->Inherited = Inherited;
@@ -11179,6 +11221,8 @@ const char *Attr::getSpelling() const {
     return cast<FormatAttr>(this)->getSpelling();
   case attr::FormatArg:
     return cast<FormatArgAttr>(this)->getSpelling();
+  case attr::FortifyStdLib:
+    return cast<FortifyStdLibAttr>(this)->getSpelling();
   case attr::GNUInline:
     return cast<GNUInlineAttr>(this)->getSpelling();
   case attr::GuardedBy:
@@ -11735,6 +11779,8 @@ Attr *Attr::clone(ASTContext &C) const {
     return cast<FormatAttr>(this)->clone(C);
   case attr::FormatArg:
     return cast<FormatArgAttr>(this)->clone(C);
+  case attr::FortifyStdLib:
+    return cast<FortifyStdLibAttr>(this)->clone(C);
   case attr::GNUInline:
     return cast<GNUInlineAttr>(this)->clone(C);
   case attr::GuardedBy:
@@ -12291,6 +12337,8 @@ void Attr::printPretty(raw_ostream &OS, const PrintingPolicy &Policy) const {
     return cast<FormatAttr>(this)->printPretty(OS, Policy);
   case attr::FormatArg:
     return cast<FormatArgAttr>(this)->printPretty(OS, Policy);
+  case attr::FortifyStdLib:
+    return cast<FortifyStdLibAttr>(this)->printPretty(OS, Policy);
   case attr::GNUInline:
     return cast<GNUInlineAttr>(this)->printPretty(OS, Policy);
   case attr::GuardedBy:

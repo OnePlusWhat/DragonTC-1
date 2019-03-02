@@ -210,6 +210,7 @@ DIAG(ext_variadic_macro, CLASS_EXTENSION, (unsigned)diag::Severity::Ignored, "va
 DIAG(note_header_guard, CLASS_NOTE, (unsigned)diag::Severity::Fatal, "%0 is defined here; did you mean %1?", 0, SFINAE_Suppress, false, false, 1)
 DIAG(note_implicit_top_level_module_import_here, CLASS_NOTE, (unsigned)diag::Severity::Fatal, "submodule of top-level module '%0' implicitly imported here", 0, SFINAE_Suppress, false, false, 1)
 DIAG(note_init_list_at_beginning_of_macro_argument, CLASS_NOTE, (unsigned)diag::Severity::Fatal, "cannot use initializer list at the beginning of a macro argument", 0, SFINAE_Suppress, false, false, 1)
+DIAG(note_macro_expansion_here, CLASS_NOTE, (unsigned)diag::Severity::Fatal, "expansion of macro %0 requested here", 0, SFINAE_Suppress, false, false, 1)
 DIAG(note_macro_here, CLASS_NOTE, (unsigned)diag::Severity::Fatal, "macro %0 defined here", 0, SFINAE_Suppress, false, false, 1)
 DIAG(note_mmap_add_framework_keyword, CLASS_NOTE, (unsigned)diag::Severity::Fatal, "use 'framework module' to declare module '%0'", 0, SFINAE_Suppress, false, false, 1)
 DIAG(note_mmap_lbrace_match, CLASS_NOTE, (unsigned)diag::Severity::Fatal, "to match this '{'", 0, SFINAE_Suppress, false, false, 1)

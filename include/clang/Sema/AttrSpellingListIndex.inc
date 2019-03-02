@@ -650,6 +650,15 @@
         return 1;
     break;
   }
+  case AT_FortifyStdLib: {
+    if (Name == "fortify_stdlib" && SyntaxUsed == 0 && Scope == "")
+        return 0;
+    if (Name == "fortify_stdlib" && SyntaxUsed == 1 && Scope == "clang")
+        return 1;
+    if (Name == "fortify_stdlib" && SyntaxUsed == 2 && Scope == "clang")
+        return 2;
+    break;
+  }
   case AT_GNUInline: {
     if (Name == "gnu_inline" && SyntaxUsed == 0 && Scope == "")
         return 0;
